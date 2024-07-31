@@ -1,6 +1,6 @@
-# CityDataToBinaryModel
+# Cartesian TileBakeTool
 
-## TileBakeTool
+## The TileBakeTool
 
 The TileBakeTool is an executable that converts RD coordinate based CityJSON files from a target folder into combined binary mesh tiles. City Objects are added to tiles using an OVERLAP or TILED method.
 
