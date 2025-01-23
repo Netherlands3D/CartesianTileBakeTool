@@ -16,6 +16,7 @@
 *  permissions and limitations under the License.
 */
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -23,6 +24,7 @@ using System.Text.Json;
 using System.Threading;
 using TileBakeLibrary;
 using TileBakeLibrary.BinaryMesh;
+
 
 namespace TileBakeTool
 {
@@ -142,9 +144,49 @@ namespace TileBakeTool
                 case "--bin":
                     InspectBinaryMesh(value);
                     break;
+                case "--datafile":
+                    InspectDataFile(value); 
+                    break;
+                case "--spike":
+                    spike(value);
+                        break;
                 default:
                     break;
             }
+        }
+
+        private static void spike(string sigmastring)
+        {
+           // meshTest(sourcePathOverride);
+            //return;
+
+            float sigma = 5;
+            float.TryParse(sigmastring, out sigma);
+            
+            SpikeRemoval.RemoveSpikes(sourcePathOverride,true);
+
+            var tileBaker = new CityJSONToTileConverter();
+            tileBaker.SetTargetPath(sourcePathOverride);
+            tileBaker.CompressFiles();
+
+        }
+
+        private static void meshTest(string filepath)
+        {
+            var binFilesFilter = $"*.bin";
+
+            string[] allBinFiles = Directory.GetFiles(Path.GetDirectoryName(filepath), binFilesFilter);
+            List<string> newFiles = new List<string>();
+            for (int i = 0; i < allBinFiles.Length; i++)
+            {
+                if (allBinFiles[i].EndsWith("data.bin"))
+                {
+                    continue;
+                }
+                newFiles.Add(allBinFiles[i]);
+            }
+            SpikeRemoval.TestVertexCounts(newFiles);
+            
         }
 
         private static void PeakInFile(string filename)
@@ -164,6 +206,40 @@ namespace TileBakeTool
             Console.WriteLine("");
             Console.Write(result);
             Console.WriteLine(".....");
+        }
+
+        private static void InspectDataFile(string filename)
+        {
+            if (!File.Exists(filename))
+            {
+                Console.WriteLine(filename + " does not exist. Cant inspect.");
+                return;
+            }
+            IdentifierData identifierdata = BinaryMeshReader.ReadBinaryIdentifiers(filename);
+            string outputFileName = Path.ChangeExtension(filename, ".csv");
+            using (StreamWriter writer = new StreamWriter(outputFileName))
+            {
+                writer.Write("objectID");
+                writer.Write(";");
+                writer.Write("submesh");
+                writer.Write(";");
+                writer.Write("startvertex");
+                writer.Write(";");
+                writer.Write("vertexlength");
+                writer.WriteLine(";");
+                foreach (var identifier in identifierdata.identifiers)
+                {
+                    writer.Write(identifier.objectID);
+                    writer.Write(";");
+                    writer.Write(identifier.submeshIndex);
+                    writer.Write(";");
+                    writer.Write(identifier.startVertex);
+                    writer.Write(";");
+                    writer.Write(identifier.vertexLength);
+                    writer.WriteLine(";");
+                }
+            }
+            Console.WriteLine("Inspected " + filename + ". Results saved to " + outputFileName);
         }
 
         private static void InspectBinaryMesh(string filename)

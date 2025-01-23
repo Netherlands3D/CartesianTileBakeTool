@@ -257,7 +257,13 @@ namespace TileBakeLibrary
             }
 			Console.WriteLine($"Log file: {currentPath}/bakelog{readableDateTime}.txt");
 
-			//Optional compressed variant
+            if (clipSpikes)
+            {
+                Console.WriteLine($"\nremoving spikes");
+                SpikeRemoval.RemoveSpikes(outputPath);
+            }
+
+            //Optional compressed variant
             if (brotliCompress)
 			{
 				CompressFiles();
@@ -431,17 +437,30 @@ namespace TileBakeLibrary
         /// </summary>
         public void CompressFiles()
 		{
-			var binFilesFilter = $"*{lod}.bin";
-			var dataFilesFilter = $"*{lod}-data.bin";
+			var binFilesFilter = $"*.bin";
 
-			string[] binFiles = Directory.GetFiles(Path.GetDirectoryName(outputPath), binFilesFilter);
-			string[] binDataFiles = Directory.GetFiles(Path.GetDirectoryName(outputPath), dataFilesFilter);
+			string[] allBinFiles = Directory.GetFiles(Path.GetDirectoryName(outputPath), binFilesFilter);
 
-			List<string> allFiles = new List<string>();
-			allFiles.AddRange(binFiles);
-			allFiles.AddRange(binDataFiles);
+			List<string> newFiles = new List<string>();
+            for (int i = 0; i < allBinFiles.Length; i++)
+            {
+                bool isNew = true;
+                if (File.Exists(allBinFiles[i] + ".br"))
+                {
+                    if (File.GetCreationTimeUtc(allBinFiles[i] + ".br") > File.GetCreationTimeUtc(allBinFiles[i]))
+                    {
+                        isNew = false;
+                    }
+                }
+                if (isNew == true)
+                {
+                    newFiles.Add(allBinFiles[i]);
+                }
+            }
+
+            
 			
-			binFiles = allFiles.ToArray();
+			string[] binFiles = newFiles.ToArray();
 
 			Stopwatch watch = new Stopwatch();
 			watch.Start();
@@ -525,11 +544,6 @@ namespace TileBakeLibrary
 					return;
 				}
 				WriteParsingStatusToConsole(skipped, done, parsing, simplifying, tiling);
-
-                if (clipSpikes)
-                {
-                    subObject.ClipSpikes(spikeCeiling, spikeFloor);
-                }
 
                 if (subObject.maxVerticesPerSquareMeter > 0)
 				{
