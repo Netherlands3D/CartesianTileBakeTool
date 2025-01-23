@@ -2,7 +2,7 @@
   "profiles": {
     "TileBakeTool": {
       "commandName": "Project",
-      "commandLineArgs": "--source \"E:/Netherlands3D/Terrain_2019/\" --spike \"3\""
+      "commandLineArgs": "--source \"D:/tilebaketool/terraintiles/\" --output \"D:/tilebaketool/terraintiles/6m\" --simplify \"3\""
     }
   }
 }

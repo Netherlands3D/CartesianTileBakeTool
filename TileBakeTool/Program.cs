@@ -16,21 +16,19 @@
 *  permissions and limitations under the License.
 */
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Threading;
 using TileBakeLibrary;
-using TileBakeLibrary.BinaryMesh;
-
 
 namespace TileBakeTool
 {
     class Program
     {
         private static ConfigFile configFile;
+
         private static string sourcePathOverride = "";
         private static string outputPathOverride = "";
         private static float lodOverride = 1;
@@ -47,18 +45,11 @@ namespace TileBakeTool
             {
                 ShowHelp();
             }
-            //One parameter? Inspect .bin or else assume its a config file
+            //One parameter? Assume its a config file path. (Dragging file on .exe)
             else if (args.Length == 1)
             {
                 waitForUserInputOnFinish = true;
-                if (args[0].Contains(".bin"))
-                {
-                    InspectBinaryMesh(args[0]);
-                }
-                else
-                {
-                    ApplyConfigFileSettings(args[0]);
-                }
+                ApplyConfigFileSettings(args[0]);
             }
             //More parameters? Parse them
             else
@@ -138,62 +129,30 @@ namespace TileBakeTool
                     lodOverride = float.Parse(value, System.Globalization.CultureInfo.InvariantCulture);
                     Console.WriteLine($"LOD filter: {lodOverride}");
                     break;
-                case "--peek":
+                case "--peak":
                     PeakInFile(value);
                     break;
-                case "--bin":
-                    InspectBinaryMesh(value);
+                case "--simplify":
+                    TIleSimplifier simplifier = new TIleSimplifier();
+                    //simplifier.SimplifyTiles("E:/brondata/terreintest/output-buildings/", "E:/brondata/terreintest/Simplified6m", 6);
+                    //simplifier.SimplifyTiles("E:/brondata/terreintest/Simplified6m/", "E:/brondata/terreintest/Simplified20m", 20);
+                    //simplifier.SimplifyTiles("C:/Users/mvang/3DAmsterdam/buildings/", "C:/Users/mvang/3DAmsterdam/buildings3m", 3);
+                    //simplifier.SimplifyTiles("C:/Users/mvang/3DAmsterdam/buildings/", "C:/Users/mvang/3DAmsterdam/buildings12m", 12);
+                    //simplifier.SimplifyTiles("C:/Users/mvang/3DAmsterdam/terrain/output/", "C:/Users/mvang/3DAmsterdam/terrain3m", 3,true);
+                    //simplifier.SimplifyTiles("C:/Users/mvang/3DAmsterdam/terrain/output/", "C:/Users/mvang/3DAmsterdam/terrain6m", 6,true);
+                    //simplifier.SimplifyTiles("C:/Users/mvang/3DAmsterdam/terrain6m/", "C:/Users/mvang/3DAmsterdam/terrain12m", 12);
+                    simplifier.SimplifyTiles(sourcePathOverride, outputPathOverride, float.Parse(value)); ;
                     break;
-                case "--datafile":
-                    InspectDataFile(value); 
-                    break;
-                case "--spike":
-                    spike(value);
-                        break;
                 default:
                     break;
             }
         }
 
-        private static void spike(string sigmastring)
-        {
-           // meshTest(sourcePathOverride);
-            //return;
-
-            float sigma = 5;
-            float.TryParse(sigmastring, out sigma);
-            
-            SpikeRemoval.RemoveSpikes(sourcePathOverride,true);
-
-            var tileBaker = new CityJSONToTileConverter();
-            tileBaker.SetTargetPath(sourcePathOverride);
-            tileBaker.CompressFiles();
-
-        }
-
-        private static void meshTest(string filepath)
-        {
-            var binFilesFilter = $"*.bin";
-
-            string[] allBinFiles = Directory.GetFiles(Path.GetDirectoryName(filepath), binFilesFilter);
-            List<string> newFiles = new List<string>();
-            for (int i = 0; i < allBinFiles.Length; i++)
-            {
-                if (allBinFiles[i].EndsWith("data.bin"))
-                {
-                    continue;
-                }
-                newFiles.Add(allBinFiles[i]);
-            }
-            SpikeRemoval.TestVertexCounts(newFiles);
-            
-        }
-
         private static void PeakInFile(string filename)
         {
-            if (!File.Exists(filename))
+            if(!File.Exists(filename))
             {
-                Console.WriteLine(filename + " does not exist. Cant peek.");
+                Console.WriteLine(filename + " does not exist. Cant peak.");
                 return;
             }
             using var stream = File.OpenRead(filename);
@@ -208,91 +167,11 @@ namespace TileBakeTool
             Console.WriteLine(".....");
         }
 
-        private static void InspectDataFile(string filename)
-        {
-            if (!File.Exists(filename))
-            {
-                Console.WriteLine(filename + " does not exist. Cant inspect.");
-                return;
-            }
-            IdentifierData identifierdata = BinaryMeshReader.ReadBinaryIdentifiers(filename);
-            string outputFileName = Path.ChangeExtension(filename, ".csv");
-            using (StreamWriter writer = new StreamWriter(outputFileName))
-            {
-                writer.Write("objectID");
-                writer.Write(";");
-                writer.Write("submesh");
-                writer.Write(";");
-                writer.Write("startvertex");
-                writer.Write(";");
-                writer.Write("vertexlength");
-                writer.WriteLine(";");
-                foreach (var identifier in identifierdata.identifiers)
-                {
-                    writer.Write(identifier.objectID);
-                    writer.Write(";");
-                    writer.Write(identifier.submeshIndex);
-                    writer.Write(";");
-                    writer.Write(identifier.startVertex);
-                    writer.Write(";");
-                    writer.Write(identifier.vertexLength);
-                    writer.WriteLine(";");
-                }
-            }
-            Console.WriteLine("Inspected " + filename + ". Results saved to " + outputFileName);
-        }
-
-        private static void InspectBinaryMesh(string filename)
-        {
-            if (!File.Exists(filename))
-            {
-                Console.WriteLine(filename + " does not exist. Cant inspect.");
-                return;
-            }
-            MeshData mesh = BinaryMeshReader.ReadBinaryMesh(filename);
-
-            // Write results to a text file
-            string outputFileName = Path.ChangeExtension(filename, ".txt");
-            using (StreamWriter writer = new StreamWriter(outputFileName))
-            {
-                writer.WriteLine("Vertices: " + mesh.vertexCount);
-                writer.WriteLine("Normals: " + mesh.normalsCount);
-                writer.WriteLine("UVs: " + mesh.uvCount);
-                writer.WriteLine("Indices: " + mesh.indexCount);
-                writer.WriteLine("Submeshes: " + mesh.submeshCount);
-                writer.WriteLine("Vertices:");
-                foreach (var vertex in mesh.vertices)
-                {
-                    writer.WriteLine(vertex);
-                }
-                writer.WriteLine("Normals:");
-                foreach (var normal in mesh.normals)
-                {
-                    writer.WriteLine(normal);
-                }
-                writer.WriteLine("UVs:");
-                foreach (var uv in mesh.uvs)
-                {
-                    writer.WriteLine(uv);
-                }
-                writer.WriteLine("Indices:");
-                foreach (var index in mesh.indices)
-                {
-                    writer.WriteLine(index);
-                }
-            }
-
-            //Log the log file path name
-            Console.WriteLine("Inspected " + filename + ". Results saved to " + outputFileName);
-        }
-
         /// <summary>
         /// Start the converting process using the current configuration
         /// </summary>
         private static void StartConverting()
         {
-             //Print config to console
-            Console.WriteLine(JsonSerializer.Serialize(configFile, new JsonSerializerOptions() { WriteIndented = true }));
             Console.WriteLine("Starting...");
 
             //Here we use the .dll. This way we may use this library in Unity, or an Azure C# Function
@@ -301,8 +180,6 @@ namespace TileBakeTool
             tileBaker.SetTargetPath((outputPathOverride != "") ? outputPathOverride : configFile.outputFolder);
             tileBaker.SetLOD((lodOverride != 1) ? lodOverride : configFile.lod);
             tileBaker.SetVertexMergeAngleThreshold(configFile.mergeVerticesBelowAngle);
-            tileBaker.SetMinHoleVertices(configFile.minHoleVertices);
-            tileBaker.SetMinHoleSize(configFile.minHoleSize);
             tileBaker.SetID(configFile.identifier, configFile.removePartOfIdentifier);
             tileBaker.SetReplace(configFile.replaceExistingObjects);
             tileBaker.SetExportUV(configFile.exportUVCoordinates);
