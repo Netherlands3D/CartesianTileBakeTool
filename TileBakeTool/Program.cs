@@ -142,6 +142,14 @@ namespace TileBakeTool
                 case "--bin":
                     InspectBinaryMesh(value);
                     break;
+                case "--simplify":
+                    TIleSimplifier simplifier = new TIleSimplifier();
+                    simplifier.SimplifyTiles(sourcePathOverride, outputPathOverride, float.Parse(value)); ;
+
+                    var tileBaker = new CityJSONToTileConverter();
+                    tileBaker.SetTargetPath(outputPathOverride);
+                    tileBaker.CompressFiles();
+                    break;
                 default:
                     break;
             }
