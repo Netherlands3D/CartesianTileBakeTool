@@ -5,7 +5,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <ApplicationIcon>app_icon.ico</ApplicationIcon>
     <Win32Resource />
-    <Platforms>AnyCPU;x64</Platforms>
+    <Platforms>AnyCPU</Platforms>
     <StartupObject>TileBakeTool.Program</StartupObject>
   </PropertyGroup>
 
