@@ -6,6 +6,7 @@
     <ApplicationIcon>app_icon.ico</ApplicationIcon>
     <Win32Resource />
     <Platforms>AnyCPU</Platforms>
+	 <RuntimeIdentifiers>win10-x64;linux-x64</RuntimeIdentifiers>
     <StartupObject>TileBakeTool.Program</StartupObject>
   </PropertyGroup>
 
