@@ -326,6 +326,13 @@ namespace TileBakeLibrary
 
 		public void CalculateNormals()
         {
+			if (normals.Count == 0)
+			{
+				normals = new List<Vector3>();
+				for (int i = 0; i < vertices.Count; i++) {
+					normals.Add(new Vector3(0, 1, 0));
+				}
+			}
             for (int i = 0; i < triangleIndices.Count; i+=3)
             {
 				int index1 = triangleIndices[i];

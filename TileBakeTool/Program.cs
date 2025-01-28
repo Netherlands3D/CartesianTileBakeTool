@@ -148,7 +148,16 @@ namespace TileBakeTool
 
                     var tileBaker = new CityJSONToTileConverter();
                     tileBaker.SetTargetPath(outputPathOverride);
+                    
+                    tileBaker.AddBrotliCompressedFile(true);
                     tileBaker.CompressFiles();
+                    break;
+                case "--compress":
+                    var compressor = new CityJSONToTileConverter();
+                    compressor.SetTargetPath(value);
+                    compressor.AddBrotliCompressedFile(true);
+                    compressor.CompressFiles();
+
                     break;
                 default:
                     break;

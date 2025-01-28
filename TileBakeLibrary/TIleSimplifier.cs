@@ -47,6 +47,7 @@ namespace TileBakeLibrary
             string[] filenameMainParts = folderparts[folderparts.Length - 1].Split('.');
             string[] filenameparts = filenameMainParts[0].Split('_');
             filenameparts[0] = filenameparts[0].Replace("Terrain", "");
+            filenameparts[0] = filenameparts[0].Replace("buildings-", "");
             //string[] locationParts = filenameparts[1].Split('_');
             double posX = double.Parse(filenameparts[0]);
             double posY = double.Parse(filenameparts[1]);
@@ -182,8 +183,9 @@ namespace TileBakeLibrary
             }
             foreach (KeyValuePair<int,SubObject> kvp in subobjectDictionary)
             {
-                kvp.Value.MergeSimilarVertices();
                 kvp.Value.CalculateNormals();
+                kvp.Value.MergeSimilarVertices();
+                
                 newTile.SubObjects.Add(kvp.Value);
             }
             return newTile;

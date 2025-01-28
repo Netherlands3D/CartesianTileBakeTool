@@ -431,17 +431,17 @@ namespace TileBakeLibrary
         /// </summary>
         public void CompressFiles()
 		{
-			var binFilesFilter = $"*{lod}.bin";
-			var dataFilesFilter = $"*{lod}-data.bin";
+			var binFilesFilter = $"*.bin";
+			//var dataFilesFilter = $"*{lod}-data.bin";
 
 			string[] binFiles = Directory.GetFiles(Path.GetDirectoryName(outputPath), binFilesFilter);
-			string[] binDataFiles = Directory.GetFiles(Path.GetDirectoryName(outputPath), dataFilesFilter);
+			//string[] binDataFiles = Directory.GetFiles(Path.GetDirectoryName(outputPath), dataFilesFilter);
 
-			List<string> allFiles = new List<string>();
-			allFiles.AddRange(binFiles);
-			allFiles.AddRange(binDataFiles);
+			//List<string> allFiles = new List<string>();
+			//allFiles.AddRange(binFiles);
+			//allFiles.AddRange(binDataFiles);
 			
-			binFiles = allFiles.ToArray();
+			//binFiles = allFiles.ToArray();
 
 			Stopwatch watch = new Stopwatch();
 			watch.Start();
