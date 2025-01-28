@@ -119,7 +119,7 @@ namespace TileBakeLibrary
                
                 if (mesh.VertexCount<3)
                 {
-                    Console.WriteLine("invalid " + originalTile.filePath);
+                Console.WriteLine("invalid " + originalTile.filePath);
                     return originalTile;
                 }
             }

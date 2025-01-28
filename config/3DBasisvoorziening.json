@@ -1,6 +1,6 @@
 {
-	"sourceFolder":"E:/brondata/TerreinModel Kadaster/nieuwe versie/gereed/",
-	"outputFolder": "E:/brondata/terreintest/output/Terrain-",
+	"sourceFolder":"D:/temp/cityjson/",
+	"outputFolder": "D:/temp/maaiveld/Terrain-",
 	"replaceExistingObjects":false,
 	"identifier":"objectid",
 	"removePartOfIdentifier":"",

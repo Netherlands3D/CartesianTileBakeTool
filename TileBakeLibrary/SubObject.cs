@@ -57,7 +57,12 @@ namespace TileBakeLibrary
 				oldIndex = triangleIndices[i];
 
 				vertex = vertices[oldIndex];
-				normal = normals[oldIndex];
+				normal = new Vector3(0, 1, 0);
+				if (normals.Count>0)
+				{
+                    normal = normals[oldIndex];
+                }
+				
 				if (uvs.Count > 0 && uvs.Count == vertices.Count)
 				{
 					uv = uvs[oldIndex];
