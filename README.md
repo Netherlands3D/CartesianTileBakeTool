@@ -34,3 +34,12 @@ The Gltf files also allow you to load/preview the 3D output using 3D viewers/too
 ## Brotli compression
 
 The TileBakeTool can optionaly create compressed versions of the binary tiles using Brotli compression, reducing download times for streaming in the data in  web applications.
+compression can also be done after the tiles have been created using:
+`TileBakeTool.exe --compress folderWithTilesToCompress`
+
+
+## Tile Simplification
+
+For creating multiple LODS for a dataset a copy of the tileset can be created where the meshes are simplified
+
+Use `TileBakeTool.exe --source pathOFOriginalTiles --output pathOfSimplifiedTiles --simplify minimumTriangleSize` to start the tool using the config file.
