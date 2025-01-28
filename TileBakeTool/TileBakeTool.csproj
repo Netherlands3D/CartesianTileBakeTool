@@ -6,6 +6,7 @@
     <ApplicationIcon>app_icon.ico</ApplicationIcon>
     <Win32Resource />
     <Platforms>AnyCPU;x64</Platforms>
+    <StartupObject>TileBakeTool.Program</StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
