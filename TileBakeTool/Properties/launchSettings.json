@@ -1,8 +1,7 @@
 {
   "profiles": {
     "TileBakeTool": {
-      "commandName": "Project",
-      "commandLineArgs": "--source \"D:/tilebaketool/\" --output \"D:/tilebaketool/test/\" --simplify 6"
+      "commandName": "Project"
     }
   }
 }
