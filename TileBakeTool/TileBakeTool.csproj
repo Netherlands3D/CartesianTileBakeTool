@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
-	<SelfContained>False</SelfContained>
+	<RuntimeIdentifier>win-x86</RuntimeIdentifier>
     <ApplicationIcon>app_icon.ico</ApplicationIcon>
     <Win32Resource />
     <Platforms>AnyCPU;x64</Platforms>
