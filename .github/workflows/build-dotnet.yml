@@ -51,13 +51,14 @@ jobs:
       with:
         name: windows-artifacts
         path: ./windows-publish
-
+        overwrite: true
     - name: Publish Linux Artifacts
       if: runner.os == 'Linux'
       uses: actions/upload-artifact@v4
       with:
         name: linux-artifacts
         path: ./linux-publish
+        overwrite: true
 
     - name: Publish macOS Artifacts
       if: runner.os == 'macOS'
@@ -65,3 +66,4 @@ jobs:
       with:
         name: macos-artifacts
         path: ./macos-publish
+        overwrite: true
