@@ -1,8 +1,7 @@
 {
   "profiles": {
     "TileBakeTool": {
-      "commandName": "Project",
-      "commandLineArgs": "--config \"C:/Users/samba/Desktop/TileBakeTool_SourceData/3DBag.json\""
+      "commandName": "Project"
     }
   }
 }

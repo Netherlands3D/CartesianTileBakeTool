@@ -26,7 +26,7 @@ using TileBakeLibrary.BinaryMesh;
 
 namespace TileBakeLibrary
 {
-    class BinaryMeshWriter
+    public class BinaryMeshWriter
     {
         private static int writerVersion = 1;
 

@@ -160,11 +160,16 @@ namespace TileBakeLibrary.BinaryMesh
             MeshData mesh = BinaryMeshReader.ReadBinaryMesh(tile.filePath);
             string identifierFilename = tile.filePath.Replace(".bin", "-data.bin");
             IdentifierData identifierdata = BinaryMeshReader.ReadBinaryIdentifiers(identifierFilename);
+
             foreach (Identifier identifier in identifierdata.identifiers)
             {
-                if(replaceExistingIDs && tile.SubObjects.Any((subObject) => subObject.id == identifier.objectID)){
-                    Console.WriteLine($"Replacing object with ID: {identifier.objectID}");
-                    continue;
+                if(replaceExistingIDs)
+                    {
+                    if (tile.SubObjects.Any((subObject) => subObject.id == identifier.objectID))
+                    {
+                        Console.WriteLine($"Replacing object with ID: {identifier.objectID}");
+                        continue;
+                    }
 				}
 
                 SubObject subobject = new SubObject();

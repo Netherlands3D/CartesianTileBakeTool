@@ -57,7 +57,12 @@ namespace TileBakeLibrary
 				oldIndex = triangleIndices[i];
 
 				vertex = vertices[oldIndex];
-				normal = normals[oldIndex];
+				normal = new Vector3(0, 1, 0);
+				if (normals.Count>0)
+				{
+                    normal = normals[oldIndex];
+                }
+				
 				if (uvs.Count > 0 && uvs.Count == vertices.Count)
 				{
 					uv = uvs[oldIndex];
@@ -326,6 +331,13 @@ namespace TileBakeLibrary
 
 		public void CalculateNormals()
         {
+			if (normals.Count == 0)
+			{
+				normals = new List<Vector3>();
+				for (int i = 0; i < vertices.Count; i++) {
+					normals.Add(new Vector3(0, 1, 0));
+				}
+			}
             for (int i = 0; i < triangleIndices.Count; i+=3)
             {
 				int index1 = triangleIndices[i];
