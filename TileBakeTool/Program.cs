@@ -132,17 +132,7 @@ namespace TileBakeTool
                 case "--peak":
                     PeakInFile(value);
                     break;
-                case "--simplify":
-                    TIleSimplifier simplifier = new TIleSimplifier();
-                    //simplifier.SimplifyTiles("E:/brondata/terreintest/output-buildings/", "E:/brondata/terreintest/Simplified6m", 6);
-                    //simplifier.SimplifyTiles("E:/brondata/terreintest/Simplified6m/", "E:/brondata/terreintest/Simplified20m", 20);
-                    //simplifier.SimplifyTiles("C:/Users/mvang/3DAmsterdam/buildings/", "C:/Users/mvang/3DAmsterdam/buildings3m", 3);
-                    //simplifier.SimplifyTiles("C:/Users/mvang/3DAmsterdam/buildings/", "C:/Users/mvang/3DAmsterdam/buildings12m", 12);
-                    //simplifier.SimplifyTiles("C:/Users/mvang/3DAmsterdam/terrain/output/", "C:/Users/mvang/3DAmsterdam/terrain3m", 3,true);
-                    //simplifier.SimplifyTiles("C:/Users/mvang/3DAmsterdam/terrain/output/", "C:/Users/mvang/3DAmsterdam/terrain6m", 6,true);
-                    //simplifier.SimplifyTiles("C:/Users/mvang/3DAmsterdam/terrain6m/", "C:/Users/mvang/3DAmsterdam/terrain12m", 12);
-                    simplifier.SimplifyTiles(sourcePathOverride, outputPathOverride, float.Parse(value)); ;
-                    break;
+
                 case "--simplify":
                     TIleSimplifier simplifier = new TIleSimplifier();
                     simplifier.SimplifyTiles(sourcePathOverride, outputPathOverride, float.Parse(value)); ;
