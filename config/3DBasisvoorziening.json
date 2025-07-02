@@ -20,7 +20,7 @@
 		{
 			"objectType":"PlantCover",
 			"defaultSubmeshIndex":4,
-			"maxVerticesPerSquareMeter": 0.01,
+			"_removed_parameter_squareMetersPerVertex": 100,
 			"attributeFilters":[]
 		},
 		{
@@ -83,7 +83,7 @@
 		{
 			"objectType":"LandUse",
 			"defaultSubmeshIndex":6,
-			"maxVerticesPerSquareMeter": 0.01,
+			"_removed_parameter_squareMetersPerVertex": 100,
 			"attributeFilters":[
 				{
 					"attributeName":"bgt_fysiekvoorkomen",

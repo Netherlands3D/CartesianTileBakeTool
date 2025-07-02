@@ -132,14 +132,20 @@ namespace TileBakeTool
                 case "--peak":
                     PeakInFile(value);
                     break;
-
                 case "--simplify":
-                    TIleSimplifier simplifier = new TIleSimplifier();
-                    simplifier.SimplifyTiles(sourcePathOverride, outputPathOverride, float.Parse(value)); ;
+                    if (!int.TryParse(value, out int squareMetersPerVertex) || squareMetersPerVertex <= 0)
+                    {
+                        Console.WriteLine("❌ Invalid value for --simplify. Please provide a positive integer (e.g. 100 = 1 vertex per 100 m²).");
+                        return;
+                    }
+
+                    Console.WriteLine($"Simplifying using 1 vertex per {squareMetersPerVertex} m²");
+
+                    TileSimplifier simplifier = new TileSimplifier();
+                    simplifier.SimplifyTiles(sourcePathOverride, outputPathOverride, squareMetersPerVertex);
 
                     var tileBaker = new CityJSONToTileConverter();
                     tileBaker.SetTargetPath(outputPathOverride);
-                    
                     tileBaker.AddBrotliCompressedFile(true);
                     tileBaker.CompressFiles();
                     break;
