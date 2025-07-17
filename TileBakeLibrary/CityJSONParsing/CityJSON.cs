@@ -33,7 +33,6 @@ namespace Netherlands3D.CityJSON
 		public Vector3Double[] vertices;
 		private List<Vector2> textureVertices;
 		private List<Surfacetexture> Textures;
-		private List<Material> Materials;
 
 		private float LOD = -1;
 		private string filterType = "";

@@ -19,7 +19,7 @@ using System;
 using System.Collections.Generic;
 using System.Numerics;
 using TileBakeLibrary.Coordinates;
-using g3;
+using g4;
 using gs;
 using System.Linq;
 
@@ -36,7 +36,6 @@ namespace TileBakeLibrary
 		public string id = "";
 
 		private DMesh3 mesh;
-		public float maxVerticesPerSquareMeter;
 		public float skipTrianglesBelowArea;
 
 		public void MergeSimilarVertices()
@@ -120,7 +119,7 @@ namespace TileBakeLibrary
 			vertices.Clear();
 			WriteMesh outputMesh = new WriteMesh(mesh);
 			int vertCount = outputMesh.Mesh.VertexCount;
-			Vector3d vector;
+
 			Vector3d normal;
 			int[] mapV = new int[mesh.MaxVertexID];
 			int nAccumCountV = 0;
@@ -144,37 +143,6 @@ namespace TileBakeLibrary
 			mesh = null;
 
 			MergeSimilarVertices();
-		}
-
-		public void SimplifyMesh()
-        {
-            if (mesh == null)
-            {
-				CreateMesh();
-            }
-			
-			MeshNormals.QuickCompute(mesh);
-            MergeCoincidentEdges merg = new MergeCoincidentEdges(mesh);
-            merg.Apply();
-           
-            // setup up the reducer
-            Reducer reducer = new Reducer(mesh);
-            // set reducer to preserve bounds
-            reducer.SetExternalConstraints(new MeshConstraints());
-            MeshConstraintUtil.FixAllBoundaryEdges(reducer.Constraints, mesh);
-
-			int edgecount = mesh.BoundaryEdgeIndices().Count(p=>p>-1);
-			double area = MeshMeasurements.AreaT(mesh, mesh.TriangleIndices());
-			int squareMetersPerVertex = 1000;
-            int maxSurfaceCount = (int)(area* maxVerticesPerSquareMeter) +edgecount;
-            if (mesh.VertexCount > maxSurfaceCount)
-            {
-                reducer.ReduceToVertexCount(maxSurfaceCount);
-            }
-
-			mesh = reducer.Mesh;
-
-			SaveMesh();
 		}
 
 		public void ClipSpikes(float ceiling, float floor)

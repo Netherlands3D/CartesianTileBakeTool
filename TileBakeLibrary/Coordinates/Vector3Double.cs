@@ -37,17 +37,18 @@ namespace TileBakeLibrary.Coordinates
             return $"x:{X} y:{Y} z:{Z}";
         }
 
-		public static explicit operator Vector3Double(Vector3 v)
-		{
+        public static explicit operator Vector3Double(Vector3 v)
+        {
             return new Vector3Double(v.X, v.Y, v.Z);
-		}
+        }
 
-		public static explicit operator Vector3(Vector3Double v)
-		{
+        public static explicit operator Vector3(Vector3Double v)
+        {
             return new Vector3((float)v.X, (float)v.Y, (float)v.Z);
         }
 
-        public static double Distance(Vector3Double left, Vector3Double right){
+        public static double Distance(Vector3Double left, Vector3Double right)
+        {
             return Math.Abs(Magnitude(left - right));
         }
 
@@ -57,21 +58,23 @@ namespace TileBakeLibrary.Coordinates
         }
 
         public bool Equals(Vector3Double other)
-		{
-			return (other.X == X && other.Y == Y && other.Z == Z);
-		}
-        public static bool operator == (Vector3Double left, Vector3Double right)
         {
-            if (left.X==right.X && left.Y==right.Y&&left.Z==right.Z)
+            return (other.X == X && other.Y == Y && other.Z == Z);
+        }
+
+        public static bool operator ==(Vector3Double left, Vector3Double right)
+        {
+            if (left.X == right.X && left.Y == right.Y && left.Z == right.Z)
             {
                 return true;
             }
             return false;
 
         }
+
         public static bool operator !=(Vector3Double left, Vector3Double right)
         {
-            if (left==right)
+            if (left == right)
             {
                 return false;
             }
@@ -82,9 +85,25 @@ namespace TileBakeLibrary.Coordinates
         {
             return new Vector3Double(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
         }
+
         public static Vector3Double operator +(Vector3Double left, Vector3Double right)
         {
             return new Vector3Double(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Vector3Double v)
+            {
+                return this == v;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(X, Y, Z);
+        }
+
     }
 }

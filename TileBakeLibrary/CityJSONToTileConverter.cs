@@ -545,19 +545,8 @@ namespace TileBakeLibrary
 				}
 				WriteParsingStatusToConsole(skipped, done, parsing, simplifying, tiling);
 
-                if (subObject.maxVerticesPerSquareMeter > 0)
-				{
-					Interlocked.Increment(ref simplifying);
-					WriteParsingStatusToConsole(skipped, done, parsing, simplifying, tiling);
-					subObject.SimplifyMesh();
-					Interlocked.Decrement(ref simplifying);
-					WriteParsingStatusToConsole(skipped, done, parsing, simplifying, tiling);
-				}
-				else
-				{
-					//Always merge based on VertexNormalCombination.normalAngleComparisonThreshold
-					subObject.MergeSimilarVertices();
-				}
+				subObject.MergeSimilarVertices();
+
 
 				if (TilingMethod == "TILED")
 				{
@@ -616,7 +605,6 @@ namespace TileBakeLibrary
 				if (cityObjectFilters[i].objectType == cityObject.cityObjectType)
 				{
 					submeshindex = cityObjectFilters[i].defaultSubmeshIndex;
-					subObject.maxVerticesPerSquareMeter = cityObjectFilters[i].maxVerticesPerSquareMeter;
 					subObject.skipTrianglesBelowArea = cityObjectFilters[i].skipTrianglesBelowArea;
 					for (int j = 0; j < cityObjectFilters[i].attributeFilters.Length; j++)
 					{
@@ -663,11 +651,7 @@ namespace TileBakeLibrary
 					}
 				}
 			}
-			bool calculateNormals = false;
-			if (subObject.maxVerticesPerSquareMeter == 0)
-			{
-				calculateNormals = true;
-			}
+			bool calculateNormals = true;
 
 			AppendCityObjectGeometry(cityObject, subObject, calculateNormals);
 			//Append all child geometry too

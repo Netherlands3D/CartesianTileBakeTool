@@ -43,6 +43,7 @@ Optional options with values:
 --source <Source path that will override config path to source files>
 --output <Output path that will override config output path>
 --lod    <LOD value that will override the LOD filter set in the config file>
+--simplify  <Target simplification level, defined as square meters per vertex (e.g., 100 = 1 vertex per 100 m²)>
 --bin    <Path to a .bin file to inspect. A log file will be created next to it with readable content>
 
 Pipeline example 1

@@ -1,4 +1,4 @@
-﻿using g3;
+﻿using g4;
 using Netherlands3D.Gltf;
 using System;
 using System.Collections.Generic;
@@ -14,7 +14,6 @@ using TileBakeLibrary;
 using TileBakeLibrary.BinaryMesh;
 using TileBakeLibrary.Coordinates;
 
-using g3;
 using gs;
 
 namespace TileBakeLibrary
@@ -404,7 +403,6 @@ namespace TileBakeLibrary
             
             MeshNormals.QuickCompute(smartmesh);
 
-            Vector3d vector;
             Vector3d normal;
             int[] mapV = new int[smartmesh.MaxVertexID];
             int nAccumCountV = 0;
