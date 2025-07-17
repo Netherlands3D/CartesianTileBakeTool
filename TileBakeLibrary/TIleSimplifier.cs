@@ -30,7 +30,15 @@ namespace TileBakeLibrary
 
             Parallel.ForEach(binFiles, new ParallelOptions { MaxDegreeOfParallelism = 6 }, filePath =>
             {
-                SimplifyTile(filePath, targetFolder, squareMetersPerVertex, combineSubobjects);
+                try
+                {
+                    SimplifyTile(filePath, targetFolder, squareMetersPerVertex, combineSubobjects);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Fout tijdens het aanmaken of exporteren van de vereenvoudigde tile '{Path.GetFileName(filePath)}': {ex.Message}");
+                }
+
             });
 
             Console.WriteLine("Finished simplifying.");
@@ -82,14 +90,22 @@ namespace TileBakeLibrary
             Console.WriteLine($"Simplifying {fileName}");
 
             double vertexDensity = 1.0 / squareMetersPerVertex;
-            newTile = createSimplifiedTIle(originalTile, newTile, vertexDensity, combineSubobjects);
+            
+            try
+            {
+                newTile = createSimplifiedTIle(originalTile, newTile, vertexDensity, combineSubobjects);
 
-            if (newTile == null || newTile.SubObjects.Count == 0)
-                return;
+                if (newTile == null || newTile.SubObjects.Count == 0)
+                    return;
 
-            bmd = new BinaryMeshData();
-            bmd.ExportData(newTile);
-            bmd = null;
+                bmd = new BinaryMeshData();
+                bmd.ExportData(newTile);
+                bmd = null;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fout tijdens het aanmaken of exporteren van de vereenvoudigde tile: {ex.Message}");
+            }
         }
 
         private Tile createSimplifiedTIle(Tile originalTile, Tile newTile, double vertexDensity, bool combineSubobjects)
